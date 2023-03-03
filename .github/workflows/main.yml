@@ -19,9 +19,11 @@ jobs:
       
       - name: Install dependencies
         run: npm install
+      - name: list before build
+        run: ls -al
       - name: Build app
         run: npm run build
-      - name: list sfter build
+      - name: list after build
         run: ls -al
       - name: Run tests
         run: npm test
