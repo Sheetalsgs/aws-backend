@@ -47,7 +47,7 @@ jobs:
           target: "/var/myapp"
       - name: Set up SSH connection to restart app
         run: |
-            cd /var/myapp
+            cd /var/myapp/dist
             # check if PM2 app is already running
             pm2 describe main > /dev/null
             if [ $? -eq 0 ]; then
