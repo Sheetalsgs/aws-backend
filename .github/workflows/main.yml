@@ -50,4 +50,4 @@ jobs:
         with:
          ssh-private-key: ${{ secrets.EC2_KEY }}
       - name: restart app
-        run: ssh ${{ secrets.EC2_USERNAME }}@${{ secrets.EC2_HOST }} "pm2 restart /var/myapp/dist/main.js"
+        run: ssh ${{ secrets.EC2_USERNAME }}@${{ secrets.EC2_HOST }} "pm2 restart myapp"
