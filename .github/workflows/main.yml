@@ -53,5 +53,5 @@ jobs:
           username: ${{ secrets.EC2_USERNAME }}
           key: ${{ secrets.EC2_KEY }}
           script: |
-            cd /var/myapp
+            cd /var/myapp/dist
             pm2 restart main.js
