@@ -43,11 +43,14 @@ jobs:
           host: ${{ secrets.EC2_HOST }}
           username: ${{ secrets.EC2_USERNAME }}
           key: ${{ secrets.EC2_KEY }}
-          source: "dist"
-          target: "/var/myapp"
-      - name: Set up SSH connection to restart app
-        uses: webfactory/ssh-agent@v0.5.0
-        with:
-         ssh-private-key: ${{ secrets.EC2_KEY }}
-      - name: restart app
-        run: ssh ${{ secrets.EC2_USERNAME }}@${{ secrets.EC2_HOST }} "pm2 restart myapp"
+          script: |
+            cd /var/myapp
+            # check if PM2 app is already running
+            pm2 describe main > /dev/null
+            if [ $? -eq 0 ]; then
+              # app is running, restart it
+              pm2 restart backendapp
+            else
+              # app is not running, start it
+              pm2 start dist/main.js --name backendapp
+            fi
