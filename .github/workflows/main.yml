@@ -25,6 +25,8 @@ jobs:
         run: npm run build
       - name: list after build
         run: ls -al
+      - name: list inside build
+        run: ls ./dist
       - name: Run tests
         run: npm test
       - name: list after lest
@@ -43,6 +45,7 @@ jobs:
           username: ${{ secrets.EC2_USERNAME }}
           key: ${{ secrets.EC2_KEY }}
           run: pwd
+ 
           source: "dist"
           target: "/var/myapp"
       
