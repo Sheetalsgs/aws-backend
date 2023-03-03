@@ -24,17 +24,6 @@ jobs:
         run: npm run build
       - name: list sfter build
         run: ls -al
-        
-  test:
-    runs-on: self-hosted
-    needs: build
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-      
-      - name: Install dependencies
-        run: npm install
-      
       - name: Run tests
         run: npm test
       - name: list after lest
