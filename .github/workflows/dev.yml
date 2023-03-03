@@ -1,0 +1,50 @@
+name: Build, Test, Release, and Deploy
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: self-hosted
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      
+      - name: Install dependencies
+        run: npm install
+
+      - name: Build
+        run: npm run build
+      
+      - name: Test
+        run: npm run test
+      
+ 
+
+  deploy:
+    runs-on: self-hosted
+    needs: build
+    steps:
+      - name: Delete previous build
+        run: sshpass -p ${{ secrets.EC2_KEY }} ssh ${{ secrets.EC2_USERNAME }}@${{ secrets.EC2_HOST}} 'rm -rf /var/myapp/dist'
+
+      - name: Upload build to EC2 instance
+        uses: appleboy/scp-action@master
+        with:
+          host: <${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USERNAME }}
+          key: ${{ secrets.EC2_KEY }}
+          source: dist/
+          target: /var/myapp/
+
+      - name: SSH into EC2 instance and start server
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USERNAME }}
+          key: ${{ secrets.SEC2_KEY }}
+          script: |
+            cd /var/myapp/
+            pm2 start main.js
