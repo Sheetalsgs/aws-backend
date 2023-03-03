@@ -33,7 +33,8 @@ jobs:
     steps:
       - name: Delete old build files
         run: |
-          ssh -i ${{ secrets.EC2_KEY }} ${{ secrets.EC2_HOST }}@${{ secrets.EC2_USERNAME }} "rm -rf /var/myapp/dist"
+          sssh -i ${{ secrets.EC2_KEY }} ${{ secrets.EC2_USERNAME }}@${{ secrets.EC2_HOST }} "ls /var/myapp/dist"
+
       - name: Copy files to EC2
         uses: appleboy/scp-action@master
         with:
