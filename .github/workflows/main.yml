@@ -19,7 +19,6 @@ jobs:
       
       - name: Install dependencies
         run: npm install
-      
       - name: Build app
         run: npm run build
       - name: list sfter build
@@ -31,7 +30,7 @@ jobs:
         
   deploy:
     runs-on: self-hosted
-    needs: test
+    needs: build
     steps:
       - name: list before deploy 
         run: ls
