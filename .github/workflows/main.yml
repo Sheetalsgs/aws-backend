@@ -45,13 +45,9 @@ jobs:
           key: ${{ secrets.EC2_KEY }}
           source: "dist"
           target: "/var/myapp"
-      
-      - name: SSH into EC2 and restart app
-        uses: appleboy/ssh-action@master
+      - name: Set up SSH connection to restart app
+        uses: webfactory/ssh-agent@v0.5.0
         with:
-          host: ${{ secrets.EC2_HOST }}
-          username: ${{ secrets.EC2_USERNAME }}
-          key: ${{ secrets.EC2_KEY }}
-          script: |
-            cd /var/myapp/dist
-            pm2 restart main.js
+         ssh-private-key: ${{ secrets.EC2_KEY }}
+      - name: restart app
+        run: ssh ${{ secrets.EC2_USERNAME }}@${{ secrets.EC2_HOST }} "pm2 restart /var/myapp/dist/main.js"
