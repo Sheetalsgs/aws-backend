@@ -46,18 +46,20 @@ jobs:
           source: "dist"
           target: "/var/myapp"
       - name: Set up SSH connection to restart app
-        run: |
-            cd /var/myapp/dist
-            # check if PM2 app is already running
-            pm2 describe main > /dev/null
-            if [ $? -eq 0 ]; then
-              # app is running, restart it
-              pm2 restart backendapp
-            else
-              # app is not running, start it
-              pm2 start dist/main.js --name backendapp
-            fi
-     
-
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USERNAME }}
+          key: ${{ secrets.EC2_KEY }}
+          port: ${{ secrets.EC2_PORT }}
+          script: |
+             cd /var/myapp
+             if pm2 describe main > /dev/null; then
+               # app is running, restart it
+               pm2 restart backendapp
+             else
+               # app is not running, start it
+               pm2 start /var/myapp/main.js --name backendapp
+             fi
 
          
