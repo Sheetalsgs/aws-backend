@@ -53,13 +53,13 @@ jobs:
           key: ${{ secrets.EC2_KEY }}
           port: ${{ secrets.EC2_PORT }}
           script: |
-             cd /var/myapp
+             cd /var/myapp/dist
              if pm2 describe main > /dev/null; then
                # app is running, restart it
                pm2 restart backendapp
              else
                # app is not running, start it
-               pm2 start /var/myapp/main.js --name backendapp
+               pm2 start /var/myapp/dist/main.js --name backendapp
              fi
 
          
