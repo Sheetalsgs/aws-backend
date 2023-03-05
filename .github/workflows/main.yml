@@ -45,6 +45,8 @@ jobs:
           key: ${{ secrets.EC2_KEY }}
           source: "dist"
           target: "/var/myapp"
+      - name: List files on EC2
+        run: ssh ${{ secrets.EC2_USERNAME }}@${{ secrets.EC2_HOST }} "ls -al /var/myapp"
       - name: Set up SSH connection to restart app
         uses: appleboy/ssh-action@master
         with:
@@ -60,6 +62,7 @@ jobs:
              else
                # app is not running, start it
                pm2 start /var/myapp/dist/main.js --name backendapp
+               pm2 list
              fi
 
          
