@@ -1,0 +1,33 @@
+name: Prod Tag Workflow
+
+on:
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: 'Select the tag to use'
+        required: true
+        options:
+          - prod-1.0
+          - prod-2.0
+          - prod-3.0
+          # Add more tag options as needed
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    if: startsWith(github.event.inputs.tag, 'prod-')
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Install dependencies
+        run: npm install
+      - name: Build app
+        run: npm run build
+      - name: Prepare files
+        run: |
+          mkdir project
+          cp -r dist project/
+          cp package.json project/
+          cp Dockerfile project/
+     
